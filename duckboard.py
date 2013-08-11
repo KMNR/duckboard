@@ -34,7 +34,8 @@ class DuckBoardController:
         self.background = pygame.Surface(self.screen.get_size())
         self.background = self.background.convert()
         self.background.fill((0,0,0))
- 
+
+        default_color = 'green' 
         while 1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
@@ -44,10 +45,14 @@ class DuckBoardController:
                     or (event.key == K_LEFT)
                     or (event.key == K_UP)
                     or (event.key == K_DOWN)):
+                        default_color = 'red' if default_color == 'green' else 'green'
                         print(event.key)
  
-            """Draw the GUI text and boxes"""               
-            self.screen.blit(self.background, (0, 0))     
+            """Draw the GUI text and boxes"""
+            self.background.fill((0,0,0)) 
+            rect = pygame.Rect(10, 10, 320, 24)
+            pygame.draw.rect(self.background, pygame.Color(default_color), rect, 5)
+            self.screen.blit(self.background, (0, 0)) 
             if pygame.font:
                 font = pygame.font.Font(None, 36)
                 text = font.render("DuckBoard Display", 1, (255, 0, 0))
