@@ -1,11 +1,17 @@
 #! /usr/bin/env python
 
-import os, sys
+import os
+import sys
 import pygame
 from pygame.locals import *
+airhorn = os.path.join('sounds', 'AirHorn-Reggae.wav')
 
 if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
+
+import pygame.mixer
+pygame.mixer.init(44100,-16,2,2048)
+airhorn_sound = pygame.mixer.Sound(airhorn)
 
 class DuckBoardController:
     """The Main DuckBoard Class - This class handles the main 
@@ -46,6 +52,7 @@ class DuckBoardController:
                     or (event.key == K_UP)
                     or (event.key == K_DOWN)):
                         default_color = 'red' if default_color == 'green' else 'green'
+                        airhorn_sound.play()
                         print(event.key)
  
             """Draw the GUI text and boxes"""
