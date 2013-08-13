@@ -18,7 +18,7 @@ class DuckBoardController:
     initialization and creating of the GUI."""
 
 
-    def __init__(self, width=640, height=480):
+    def __init__(self, width=480, height=640):
         """Initialize"""
         """Initialize PyGame"""
         pygame.init()
@@ -41,7 +41,6 @@ class DuckBoardController:
         self.background = self.background.convert()
         self.background.fill((0,0,0))
 
-        default_color = 'green' 
         while 1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
@@ -51,14 +50,13 @@ class DuckBoardController:
                     or (event.key == K_LEFT)
                     or (event.key == K_UP)
                     or (event.key == K_DOWN)):
-                        default_color = 'red' if default_color == 'green' else 'green'
                         airhorn_sound.play()
                         print(event.key)
  
             """Draw the GUI text and boxes"""
-            self.background.fill((0,0,0)) 
-            rect = pygame.Rect(10, 10, 320, 24)
-            pygame.draw.rect(self.background, pygame.Color(default_color), rect, 5)
+            self.background.fill((0,0,0))
+            self.draw_button_areas()
+
             self.screen.blit(self.background, (0, 0)) 
             if pygame.font:
                 font = pygame.font.Font(None, 36)
@@ -67,6 +65,18 @@ class DuckBoardController:
                 self.screen.blit(text, textpos)
 
             pygame.display.flip()
+
+    def draw_button_areas(self):
+      # There will be a rectangle every 42 pxs (32 wide, 10 boundary).
+      default_color = 'green' 
+      for top_line_location in xrange(10, self.height, 42):
+          rect = pygame.Rect(10, top_line_location, 320, 32)
+          pygame.draw.rect(
+              self.background, 
+              pygame.Color(default_color), 
+              rect, 
+              5
+          )
 
 
 if __name__ == "__main__":
