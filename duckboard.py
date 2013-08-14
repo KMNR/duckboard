@@ -4,10 +4,18 @@ import os
 import sys
 import pygame
 from pygame.locals import *
+import helpers
+from button import Button
 airhorn = os.path.join('sounds', 'AirHorn-Reggae.wav')
 
 if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
+
+
+YELLOW_BUTTON_SPRITE = 'yellow.png'
+TEAL_BUTTON_SPRITE = 'teal.png'
+BLACK_BUTTON_SPRITE = 'black.png'
+
 
 import pygame.mixer
 pygame.mixer.init(44100,-16,2,2048)
@@ -18,7 +26,7 @@ class DuckBoardController:
     initialization and creating of the GUI."""
 
 
-    def __init__(self, width=480, height=640):
+    def __init__(self, width=640, height=640):
         """Initialize"""
         """Initialize PyGame"""
         pygame.init()
@@ -27,6 +35,7 @@ class DuckBoardController:
         self.height = height
         """Create the Screen"""
         self.screen = pygame.display.set_mode((width, height))
+        self.buttons = []
 
  
     def run(self):
@@ -59,24 +68,41 @@ class DuckBoardController:
 
             self.screen.blit(self.background, (0, 0)) 
             if pygame.font:
-                font = pygame.font.Font(None, 36)
+                font = pygame.font.Font(None, 16)
                 text = font.render("DuckBoard Display", 1, (255, 0, 0))
                 textpos = text.get_rect(centerx=self.background.get_width()/2)
+                textpos.midleft = (20, 320)
                 self.screen.blit(text, textpos)
 
             pygame.display.flip()
 
     def draw_button_areas(self):
       # There will be a rectangle every 42 pxs (32 wide, 10 boundary).
-      default_color = 'green' 
+      default_color = 'green'
+      border_width = 1
+      height = 32
+      width = 305
       for top_line_location in xrange(10, self.height, 42):
-          rect = pygame.Rect(10, top_line_location, 320, 32)
-          pygame.draw.rect(
-              self.background, 
-              pygame.Color(default_color), 
-              rect, 
-              5
-          )
+          # Draw button outline
+          for left in [10, 325]:
+              rect = pygame.Rect(left, top_line_location, width, height)
+              pygame.draw.rect(
+                  self.background, 
+                  pygame.Color(default_color), 
+                  rect,
+                  border_width
+              )
+
+              # Draw button sprite
+              self.buttons.append(
+                Button(
+                  'black',
+                  pygame.Rect(left, top_line_location, height, height)
+                )
+              )
+
+      self.button_sprites = pygame.sprite.Group(self.buttons)
+      self.button_sprites.draw(self.background)
 
 
 if __name__ == "__main__":
