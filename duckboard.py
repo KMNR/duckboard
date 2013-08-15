@@ -5,7 +5,7 @@ import sys
 import pygame
 from pygame.locals import *
 import settings
-airhorn = os.path.join('sounds', 'AirHorn-Reggae.wav')
+airhorn = os.path.join('sounds', 'Ha! GAAAAAY.wav')
 
 if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
@@ -51,12 +51,12 @@ class DuckBoardController:
                 if event.type == pygame.QUIT: 
                     sys.exit()
                 elif event.type == KEYDOWN:
-                    if ((event.key == K_RIGHT)
-                    or (event.key == K_LEFT)
-                    or (event.key == K_UP)
-                    or (event.key == K_DOWN)):
+                    try:
+                        coords = settings.KEYS[event.key]
                         airhorn_sound.play()
                         print(event.key)
+                    except:
+                        pass
  
             """Draw the GUI text and boxes"""
             self.background.fill(BACKGROUND_COLOR)
