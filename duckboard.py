@@ -5,7 +5,6 @@ import sys
 import pygame
 from pygame.locals import *
 import helpers
-from button import Button
 airhorn = os.path.join('sounds', 'AirHorn-Reggae.wav')
 
 if not pygame.font: print 'Warning, fonts disabled'
@@ -16,6 +15,7 @@ YELLOW_BUTTON_SPRITE = 'yellow.png'
 TEAL_BUTTON_SPRITE = 'teal.png'
 BLACK_BUTTON_SPRITE = 'black.png'
 
+BACKGROUND_COLOR = (102, 51, 0)
 
 import pygame.mixer
 pygame.mixer.init(44100,-16,2,2048)
@@ -48,7 +48,7 @@ class DuckBoardController:
         """Create the background"""
         self.background = pygame.Surface(self.screen.get_size())
         self.background = self.background.convert()
-        self.background.fill((0,0,0))
+        self.background.fill(BACKGROUND_COLOR)
 
         while 1:
             for event in pygame.event.get():
@@ -63,7 +63,7 @@ class DuckBoardController:
                         print(event.key)
  
             """Draw the GUI text and boxes"""
-            self.background.fill((0,0,0))
+            self.background.fill(BACKGROUND_COLOR)
             self.draw_button_areas()
 
             self.screen.blit(self.background, (0, 0)) 
@@ -92,17 +92,6 @@ class DuckBoardController:
                   rect,
                   border_width
               )
-
-              # Draw button sprite
-              self.buttons.append(
-                Button(
-                  'black',
-                  pygame.Rect(left, top_line_location, height, height)
-                )
-              )
-
-      self.button_sprites = pygame.sprite.Group(self.buttons)
-      self.button_sprites.draw(self.background)
 
 
 if __name__ == "__main__":
