@@ -5,17 +5,14 @@ import sys
 import pygame
 from pygame.locals import *
 import settings
-airhorn = os.path.join('sounds', 'Ha! GAAAAAY.wav')
+from profiles import default
+import pygame.mixer
+pygame.mixer.init(44100,-16,2,2048)
 
 if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
 
-
 BACKGROUND_COLOR = (102, 51, 0)
-
-import pygame.mixer
-pygame.mixer.init(44100,-16,2,2048)
-airhorn_sound = pygame.mixer.Sound(airhorn)
 
 class DuckBoardController:
     """The Main DuckBoard Class - This class handles the main 
@@ -31,8 +28,17 @@ class DuckBoardController:
         self.height = height
         """Create the Screen"""
         self.screen = pygame.display.set_mode((width, height))
-        self.buttons = []
 
+        # Initialize all sound objects
+        self.sounds = []
+        for r in default.SOUNDS:
+            sounds_for_row = []
+            for filename in r:
+                filepath = os.path.join('sounds', filename)
+                sounds_for_row.append(pygame.mixer.Sound(filepath))
+
+            self.sounds.append(sounds_for_row)
+ 
  
     def run(self):
         """This is the Main Loop of the Controller"""
@@ -52,11 +58,12 @@ class DuckBoardController:
                     sys.exit()
                 elif event.type == KEYDOWN:
                     try:
-                        coords = settings.ascii2coords[event.key]
-                        airhorn_sound.play()
-                        print(unichr(event.key))
+                        r, c = settings.ascii2coords[event.key]
                     except:
                         pass
+                    else:
+                        self.sounds[r][c].play()
+                        print(unichr(event.key))
  
             """Draw the GUI text and boxes"""
             self.background.fill(BACKGROUND_COLOR)
