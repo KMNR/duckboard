@@ -52,9 +52,9 @@ class DuckBoardController:
                     sys.exit()
                 elif event.type == KEYDOWN:
                     try:
-                        coords = settings.KEYS[event.key]
+                        coords = settings.ascii2coords[event.key]
                         airhorn_sound.play()
-                        print(event.key)
+                        print(unichr(event.key))
                     except:
                         pass
  
