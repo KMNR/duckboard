@@ -4,16 +4,12 @@ import os
 import sys
 import pygame
 from pygame.locals import *
-import helpers
+import settings
 airhorn = os.path.join('sounds', 'AirHorn-Reggae.wav')
 
 if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
 
-
-YELLOW_BUTTON_SPRITE = 'yellow.png'
-TEAL_BUTTON_SPRITE = 'teal.png'
-BLACK_BUTTON_SPRITE = 'black.png'
 
 BACKGROUND_COLOR = (102, 51, 0)
 
@@ -77,21 +73,36 @@ class DuckBoardController:
             pygame.display.flip()
 
     def draw_button_areas(self):
-      # There will be a rectangle every 42 pxs (32 wide, 10 boundary).
-      default_color = 'green'
+      distance_between_boundaries = 10
+      button_height = 32
+      button_width = 305
       border_width = 1
-      height = 32
-      width = 305
-      for top_line_location in xrange(10, self.height, 42):
-          # Draw button outline
-          for left in [10, 325]:
-              rect = pygame.Rect(left, top_line_location, width, height)
-              pygame.draw.rect(
-                  self.background, 
-                  pygame.Color(default_color), 
-                  rect,
-                  border_width
-              )
+
+      for row in xrange(0, 15):
+        for col in xrange(0, 2):
+          color = settings.COLORS[row][col]
+
+          # If row == 0, then the top line should be at 10 pxs.
+          #        == 1 -> 42
+          #        == 2 -> 84
+          #           ...
+          top = distance_between_boundaries + row*(
+                    button_height + distance_between_boundaries
+                )
+
+          # If col == 0, then the left line should be at 10 pxs.
+          #        == 1 -> 10 + 305 + 10 = 325
+          left = distance_between_boundaries + col*(
+                    button_width + distance_between_boundaries
+                 )
+
+          rect = pygame.Rect(left, top, button_width, button_height)
+          pygame.draw.rect(
+              self.background, 
+              pygame.Color(color), 
+              rect,
+              border_width
+          )
 
 
 if __name__ == "__main__":
